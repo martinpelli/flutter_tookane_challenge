@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tookane_challenge/timer/widgets/button_widget.dart';
 import 'package:flutter_tookane_challenge/timer/widgets/timer_widget.dart';
+
+import '../bloc/timer_bloc.dart';
 
 class TimerScreen extends StatelessWidget {
   const TimerScreen({Key? key}) : super(key: key);
@@ -10,10 +13,28 @@ class TimerScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: SizedBox(
-        width: 200,
+        width: 280,
         height: 200,
         child: Column(
-          children: const [TimerWidget(), Spacer(), ButtonWidget()],
+          children: [
+            BlocBuilder<TimerBloc, TimerState>(
+              buildWhen: (_, current) => current is TimerTickedState || current is TimerInitialState,
+              builder: (context, state) {
+                return TimerWidget(seconds: state.seconds);
+              },
+            ),
+            const Spacer(),
+            BlocBuilder<TimerBloc, TimerState>(
+              buildWhen: (_, current) => current is TimerInitialState || current is TimerStartedState,
+              builder: (context, state) {
+                final TimerBloc timerBloc = BlocProvider.of<TimerBloc>(context);
+
+                return state is TimerInitialState
+                    ? ButtonWidget(text: 'Start', onPressed: () => timerBloc.add(TimerStartEvent()))
+                    : ButtonWidget(text: 'Stop', onPressed: () => timerBloc.add(TimerStopEvent()));
+              },
+            )
+          ],
         ),
       )),
     );
