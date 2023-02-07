@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tookane_challenge/timer/widgets/button_widget.dart';
 import 'package:flutter_tookane_challenge/timer/widgets/timer_widget.dart';
@@ -30,7 +33,12 @@ class TimerScreen extends StatelessWidget {
                 final TimerBloc timerBloc = BlocProvider.of<TimerBloc>(context);
 
                 return state is TimerInitialState
-                    ? ButtonWidget(text: 'Start', onPressed: () => timerBloc.add(TimerStartEvent()))
+                    ? ButtonWidget(text: 'Start', onPressed: () {
+                      _startServiceInPlatform();
+                  timerBloc.add(TimerStartEvent());
+                })
+
+
                     : ButtonWidget(text: 'Stop', onPressed: () => timerBloc.add(TimerStopEvent()));
               },
             )
@@ -39,4 +47,14 @@ class TimerScreen extends StatelessWidget {
       )),
     );
   }
+
+  void _startServiceInPlatform() async {
+    if(Platform.isAndroid){
+      const methodChannel = MethodChannel("timerService");
+      String data = await methodChannel.invokeMethod("startService");
+      debugPrint(data);
+    }
+  }
+
+
 }

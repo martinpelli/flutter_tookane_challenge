@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_tookane_challenge">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <application
         android:label="flutter_tookane_challenge"
-        android:name="${applicationName}"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher">
+       <service android:name=".MyService" android:exported="true" android:enabled="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
