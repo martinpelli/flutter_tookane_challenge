@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tookane_challenge/timer/screens/timer_screen.dart';
 
 void main() => runApp(const TookaneChallengeApp());
 
@@ -7,18 +8,6 @@ class TookaneChallengeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material App Bar'),
-        ),
-        body: Center(
-          child: Container(
-            child: Text('Hello World'),
-          ),
-        ),
-      ),
-    );
+    return const MaterialApp(debugShowCheckedModeBanner: false, title: 'Tookane Challenge App', home: TimerScreen());
   }
 }
